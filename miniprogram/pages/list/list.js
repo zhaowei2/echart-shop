@@ -5,13 +5,17 @@ Page({
    * 页面的初始数据
    */
   data: {
-    listData:[],
-    foodData:[],
-    activeIndex:0,
-    scrollTop: 100,
+    listData:[],//商品分类列表
+    foodData:[],//商品列表
+    activeIndex:0,//当前商品分类
+    shop_type:'',//当前商品分类type
+    scrollTop: 100,//
     scrollH:1000,
     loading: false,
     showCart: false,//是否显示购物车
+    cartList:[],//购物车列表
+    sumMonney: 0,//总金额
+    cupNumber: 0,//总杯数
   },
 
   /**
@@ -39,7 +43,7 @@ Page({
   },
   // 获取商品
   getFoods(_type) {
-    console.log(_type)
+    console.log('获取商品')
     let db = wx.cloud.database();
     db.collection('foods')
     .where({
@@ -47,10 +51,10 @@ Page({
     })
     .get()
     .then(res => {
-      console.log(res);
       if(res.errMsg=='collection.get:ok'){
         this.setData({
           foodData:res.data,
+          shop_type:_type,
           loading: true,
         })
       }
@@ -67,24 +71,34 @@ Page({
   },
   selectInfo: function (e) {
     console.log(e.currentTarget.dataset)
-    // var type = e.currentTarget.dataset.type;
-    // var index = e.currentTarget.dataset.index;
-    // var a = this.data;
-    // var tem = a.listData[type].foods[index].tem;
-    // var temBox = [];
-    // for (let i = 0; i < tem.length; i++) {
-    //   temBox.push(tem[i].specs)
-    // }
-    // this.setData({
-    //   showModalStatus: !this.data.showModalStatus,
-    //   currentType: type,
-    //   currentIndex: index,
-    //   sizeBox: ["常规"],
-    //   sizeEx: 0,
-    //   sugarIndex: 0,
-    //   temIndex: 0,
-    //   tem: temBox
-    // });
+    let type = e.currentTarget.dataset.type;
+    let index = e.currentTarget.dataset.index;
+    let globleData = this.data;
+    let monney = 0;
+    let itemData = globleData.foodData[index];
+    let cartList = globleData.cartList;
+   
+    // cartList.push(itemData);
+    let curLen = 'cartList['+cartList.length+']'
+    this.setData({
+      [curLen]:itemData
+    })
+    console.log(cartList)
+    cartList.map(item=>{
+      monney +=parseFloat(item.price )
+    })
+    this.setData({
+      sumMonney:monney,
+      cupNumber:cartList.length
+    })
+  },
+  showCartList: function () {//显示购物车商品
+    if (this.data.cartList.length != 0) {
+      this.setData({
+        showCart: !this.data.showCart,
+      });
+    }
+
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

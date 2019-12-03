@@ -19,7 +19,7 @@
             <view style='margin-top:20rpx;color:#F05A86'>
               ¥ {{items.price}}.00
 
-              <i class="iconfont icon-jiahao2fill plus-icon fr" data-type="{{index}}" data-index="{{indexs}}" bindtap="selectInfo"></i>
+              <i class="iconfont icon-jiahao2fill plus-icon fr" data-type="{{shop_type}}" data-index="{{indexs}}" bindtap="selectInfo"></i>
               <span wx:if="{{items.num>0}}" class="fr pl">{{items.num}}</span>
               <i wx:if="{{items.num>0}}" class="iconfont icon-jian icon-li-circle fr"  bindtap="notice"></i>
             </view>
@@ -34,7 +34,7 @@
       <view class='gouwuche'>
         <view style='padding:5px;display:flex'>
           <i class="iconfont icon-gouwuchefill gouwuche-icon {{sumMonney!=0?'activity-color':'' }}" bindtap="showCartList">
-            <span class="number-msg" wx:if="{{cartList.length!=0}}">{{cupNumber}}</span>
+            <span class="number-msg" wx:if="{{cupNumber!=0}}">{{cupNumber}}</span>
           </i>
 
           <view class='gouwuche-price' wx:if="{{sumMonney==0}}">购物车是空的</view>
@@ -59,7 +59,6 @@
         </label>
       </view>
       <scroll-view scroll-y="true" class="{{cartList.length>5?'cart-scroll-list':''}}">
-
         <view class='cart-list-box' wx:for="{{cartList}}" wx:key="unique" style='border-bottom:1px #E3E3E3 solid'>
           <view class='list-info'>
             <view>{{item.name}}</view>
@@ -67,9 +66,9 @@
           </view>
           <view style='width:50%;padding:10px;'>
             <view style='float:right'>
-              <label class='activity-color font16'>¥ {{item.sum}}.00</label>
+              <label class='activity-color font16'>¥ {{item.price}}.00</label>
               <i class="iconfont icon-jian icon-li-circle" data-index="{{index}}" bindtap="decNumber"></i>
-              <span class="pl font16">{{item.number}}</span>
+              <span class="pl font16">{{item.num}}</span>
               <i class="iconfont icon-jiahao2fill activity-color font20" data-index="{{index}}" bindtap="addNumber"></i>
             </view>
           </view>
