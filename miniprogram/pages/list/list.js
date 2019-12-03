@@ -69,6 +69,7 @@ Page({
     });
     this.getFoods(type);
   },
+  // 添加商品
   selectInfo: function (e) {
     console.log(e.currentTarget.dataset)
     let type = e.currentTarget.dataset.type;
@@ -78,8 +79,7 @@ Page({
     let itemData = globleData.foodData[index];
     let cartList = globleData.cartList;
    
-    // cartList.push(itemData);
-    let curLen = 'cartList['+cartList.length+']'
+    let curLen = 'cartList['+cartList.length+']';
     this.setData({
       [curLen]:itemData
     })
@@ -92,13 +92,25 @@ Page({
       cupNumber:cartList.length
     })
   },
-  showCartList: function () {//显示购物车商品
+  //显示购物车商品
+  showCartList: function () {
     if (this.data.cartList.length != 0) {
       this.setData({
         showCart: !this.data.showCart,
       });
     }
 
+  },
+  // 跳转订单
+  goBalance: function () {
+    if (this.data.sumMonney != 0) {
+      wx.setStorageSync('cartList', this.data.cartList);
+      wx.setStorageSync('sumMonney', this.data.sumMonney);
+      wx.setStorageSync('cupNumber', this.data.cupNumber);
+      wx.navigateTo({
+        url: '../order/balance/balance?model=' + this.data.model + "&appointTime=" + this.data.appointTime
+      })
+    }
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
